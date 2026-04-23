@@ -435,16 +435,32 @@ export default function App() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Unblock background audio on first user gesture
-    if (elevatorAudio.current) {
-      elevatorAudio.current.play().then(() => {
-        // Pause immediately if we aren't at the quiz yet
-        // The useEffect will handle playing it properly later
-        if (typeof currentQuestion !== 'number') {
-          elevatorAudio.current?.pause();
-        }
-      }).catch(err => console.log("Initial audio unblock failed:", err));
-    }
+    // Unblock all audio objects on first user gesture
+    const allAudios = [
+      bruhAudio, clickAudio, correctAudio, sadcatAudio, dexterAudio, 
+      rickrollAudio, undertakerAudio, rizzAudio, spongebobAudio, 
+      yayboiAudio, yayyyAudio, nellyAudio, heavenlyAudio, sleepAudio, 
+      wowAudio, weekendrizzAudio, frenchAudio, elevatorAudio
+    ];
+
+    allAudios.forEach(audioRef => {
+      if (audioRef.current) {
+        // Play and immediately pause/mute to unblock the context
+        const audio = audioRef.current;
+        const wasPaused = audio.paused;
+        audio.play().then(() => {
+          if (wasPaused && audioRef !== elevatorAudio) {
+            audio.pause();
+            audio.currentTime = 0;
+          } else if (audioRef === elevatorAudio) {
+             // Let elevator music handle itself via useEffect/currentQuestion logic
+             if (typeof currentQuestion !== 'number') {
+               audio.pause();
+             }
+          }
+        }).catch(err => console.log("Audio unblock failed for a ref:", err));
+      }
+    });
 
     if (dob === '2004-04-24' && name.trim() !== '') {
       setIsAuthenticated(true);
@@ -655,20 +671,20 @@ export default function App() {
                 </div>
 
                {/* Comprehensive Effortless scattering: Utilizing all 14 available images (pic0-13) - centered for mobile safety */}
-               <FloatingTile src="pic0.jpeg" delay={0} x="45%" y="4%" scale={0.9} onClick={() => setSelectedImage("pic0.jpeg")} aspect="3/4" />
-               <FloatingTile src="pic1.jpeg" delay={0.3} x="55%" y="10%" scale={1.05} onClick={() => setSelectedImage("pic1.jpeg")} aspect="1/1" />
-               <FloatingTile src="pic2.jpeg" delay={0.6} x="40%" y="16%" scale={1} onClick={() => setSelectedImage("pic2.jpeg")} aspect="3/4" />
-               <FloatingTile src="pic3.jpeg" delay={0.9} x="60%" y="22%" scale={0.95} onClick={() => setSelectedImage("pic3.jpeg")} aspect="1/1" />
-               <FloatingTile src="pic4.jpeg" delay={1.2} x="48%" y="28%" scale={1.1} onClick={() => setSelectedImage("pic4.jpeg")} aspect="3/4" />
-               <FloatingTile src="pic5.jpeg" delay={1.5} x="52%" y="34%" scale={1} onClick={() => setSelectedImage("pic5.jpeg")} aspect="1/1" />
-               <FloatingTile src="pic6.jpeg" delay={1.8} x="42%" y="40%" scale={0.9} onClick={() => setSelectedImage("pic6.jpeg")} aspect="3/4" />
-               <FloatingTile src="pic7.jpeg" delay={2.1} x="58%" y="46%" scale={1.15} onClick={() => setSelectedImage("pic7.jpeg")} aspect="1/1" />
-               <FloatingTile src="pic8.jpeg" delay={0.2} x="45%" y="52%" scale={1.2} onClick={() => setSelectedImage("pic8.jpeg")} aspect="3/4" />
-               <FloatingTile src="pic9.jpeg" delay={0.5} x="55%" y="58%" scale={1.05} onClick={() => setSelectedImage("pic9.jpeg")} aspect="1/1" />
-               <FloatingTile src="pic10.jpeg" delay={0.8} x="40%" y="64%" scale={0.95} onClick={() => setSelectedImage("pic10.jpeg")} aspect="3/4" />
-               <FloatingTile src="pic11.jpeg" delay={1.1} x="60%" y="70%" scale={1.1} onClick={() => setSelectedImage("pic11.jpeg")} aspect="1/1" />
-               <FloatingTile src="pic12.jpeg" delay={1.4} x="45%" y="76%" scale={0.85} onClick={() => setSelectedImage("pic12.jpeg")} aspect="3/4" />
-               <FloatingTile src="pic13.jpeg" delay={1.7} x="55%" y="84%" scale={1.2} objectPosition="center top" onClick={() => setSelectedImage("pic13.jpeg")} aspect="3/4" />
+               <FloatingTile src="/pic0.jpeg" delay={0} x="45%" y="4%" scale={0.9} onClick={() => setSelectedImage("/pic0.jpeg")} aspect="3/4" />
+               <FloatingTile src="/pic1.jpeg" delay={0.3} x="55%" y="10%" scale={1.05} onClick={() => setSelectedImage("/pic1.jpeg")} aspect="1/1" />
+               <FloatingTile src="/pic2.jpeg" delay={0.6} x="40%" y="16%" scale={1} onClick={() => setSelectedImage("/pic2.jpeg")} aspect="3/4" />
+               <FloatingTile src="/pic3.jpeg" delay={0.9} x="60%" y="22%" scale={0.95} onClick={() => setSelectedImage("/pic3.jpeg")} aspect="1/1" />
+               <FloatingTile src="/pic4.jpeg" delay={1.2} x="48%" y="28%" scale={1.1} onClick={() => setSelectedImage("/pic4.jpeg")} aspect="3/4" />
+               <FloatingTile src="/pic5.jpeg" delay={1.5} x="52%" y="34%" scale={1} onClick={() => setSelectedImage("/pic5.jpeg")} aspect="1/1" />
+               <FloatingTile src="/pic6.jpeg" delay={1.8} x="42%" y="40%" scale={0.9} onClick={() => setSelectedImage("/pic6.jpeg")} aspect="3/4" />
+               <FloatingTile src="/pic7.jpeg" delay={2.1} x="58%" y="46%" scale={1.15} onClick={() => setSelectedImage("/pic7.jpeg")} aspect="1/1" />
+               <FloatingTile src="/pic8.jpeg" delay={0.2} x="45%" y="52%" scale={1.2} onClick={() => setSelectedImage("/pic8.jpeg")} aspect="3/4" />
+               <FloatingTile src="/pic9.jpeg" delay={0.5} x="55%" y="58%" scale={1.05} onClick={() => setSelectedImage("/pic9.jpeg")} aspect="1/1" />
+               <FloatingTile src="/pic10.jpeg" delay={0.8} x="40%" y="64%" scale={0.95} onClick={() => setSelectedImage("/pic10.jpeg")} aspect="3/4" />
+               <FloatingTile src="/pic11.jpeg" delay={1.1} x="60%" y="70%" scale={1.1} onClick={() => setSelectedImage("/pic11.jpeg")} aspect="1/1" />
+               <FloatingTile src="/pic12.jpeg" delay={1.4} x="45%" y="76%" scale={0.85} onClick={() => setSelectedImage("/pic12.jpeg")} aspect="3/4" />
+               <FloatingTile src="/pic13.jpeg" delay={1.7} x="55%" y="84%" scale={1.2} objectPosition="center top" onClick={() => setSelectedImage("/pic13.jpeg")} aspect="3/4" />
             </motion.div>
           </div>
 
@@ -1213,6 +1229,8 @@ export default function App() {
                 <video 
                   src="/hbdwishes.mp4" 
                   autoPlay 
+                  muted
+                  playsInline
                   controls
                   className="w-full h-auto max-h-[70vh] md:max-h-[60vh] object-contain rounded-[30px] bg-black/40"
                 />
