@@ -15,7 +15,7 @@ export default async function handler(req: any, res: any) {
   if (emailUser && emailPass) {
     try {
       const transporter = nodemailer.createTransport({
-        service: process.env.EMAIL_SERVICE || 'gmail',
+        service: 'gmail',
         auth: {
           user: emailUser,
           pass: emailPass,
@@ -37,13 +37,15 @@ export default async function handler(req: any, res: any) {
         text,
       });
       
-      console.log("Email sent successfully from Vercel");
-    } catch (error) {
-      console.error("Error sending email from Vercel:", error);
+      console.log(`[SUCCES] Email sent for ${data.name} (${type})`);
+    } catch (error: any) {
+      console.error("Error sending email from Vercel:", error.message || error);
+      return res.status(500).json({ success: false, error: error.message });
     }
   } else {
-    console.warn("EMAIL_USER or EMAIL_PASS not set on Vercel. Email not sent.");
+    console.error("CRITICAL: EMAIL_USER or EMAIL_PASS missing on Vercel!");
+    return res.status(500).json({ success: false, error: "Environment variables missing" });
   }
 
-  return res.status(200).json({ success: true });
+  return res.status(200).json({ success: true, timestamp: Date.now() });
 }

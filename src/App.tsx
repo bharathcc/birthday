@@ -99,8 +99,10 @@ const VideoTile = ({ src }: { src: string }) => (
         <video 
           src={src} 
           controls 
+          preload="metadata"
           playsInline
           className="w-full h-auto max-h-[80vh] block"
+          onError={(e) => console.error(`Video failed to load: ${src}`, e)}
         />
       </div>
     </LiquidGlass>
@@ -358,11 +360,17 @@ export default function App() {
 
     audioFiles.forEach(file => {
       const audio = new Audio(file.src);
-      audio.preload = 'auto'; // Force preloading
+      audio.preload = 'auto';
       if (file.ref === elevatorAudio) {
         audio.loop = true;
-        audio.volume = 0.3; // Set to 30% volume as requested
+        audio.volume = 0.3;
       }
+      
+      // Add error logging
+      audio.onerror = () => {
+        console.error(`Failed to load audio: ${file.src}`);
+      };
+      
       audio.load();
       file.ref.current = audio;
     });
@@ -1232,7 +1240,9 @@ export default function App() {
                   muted
                   playsInline
                   controls
+                  preload="auto"
                   className="w-full h-auto max-h-[70vh] md:max-h-[60vh] object-contain rounded-[30px] bg-black/40"
+                  onError={(e) => console.error("HBD Video failed to load", e)}
                 />
                 
                 <motion.div 

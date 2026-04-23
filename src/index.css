@@ -8,10 +8,13 @@
 }
 
 @theme {
-  --font-sans: 'Mabook', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Icons', 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-sans: 'Mabook', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Icons', 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 @layer base {
+  * {
+    font-family: 'Mabook', var(--font-sans);
+  }
   body {
     @apply bg-[#050505] text-white antialiased overflow-x-hidden;
   }
